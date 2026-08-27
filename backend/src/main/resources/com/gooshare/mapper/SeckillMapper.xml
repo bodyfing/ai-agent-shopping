@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gooshare.mapper.SeckillMapper">
+    <select id="getCouponsById" resultType="com.gooshare.entity.Coupon">
+        SELECT *,item_id
+        FROM coupon
+        LEFT JOIN coupon_item_rel
+        ON coupon.id = coupon_item_rel.coupon_id
+        WHERE item_id = #{itemId}
+    </select>
+
+    <insert id="addSeckillOrder">
+        INSERT INTO coupon_order (id, user_id, coupon_id, order_id)
+        VALUES (#{orderId}, #{userId}, #{seckillId}, #{orderId});
+    </insert>
+</mapper>

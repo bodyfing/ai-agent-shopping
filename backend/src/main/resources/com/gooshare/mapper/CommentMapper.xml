@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gooshare.mapper.CommentMapper">
+    <resultMap id="CommentTreeMap" type="com.gooshare.vo.CommentVO">
+        <id column="id" property="id"/>
+
+        <result column="item_id" property="itemId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_avatar" property="userAvatar"/>
+        <result column="content" property="content"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="reply_user_id" property="replyUserId"/>
+        <result column="reply_user_name" property="replyUserName"/>
+        <result column="is_seller" property="isSeller"/>
+        <result column="create_time" property="createTime"/>
+
+        <collection property="children" ofType="com.gooshare.vo.CommentVO"
+        select="findChildrenByParentId" column="id">
+
+        </collection>
+    </resultMap>
+
+
+    <select id="showCommentById" resultMap="CommentTreeMap">
+        SELECT *
+        FROM comment
+        WHERE item_id = #{itemId} AND parent_id = 0
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findChildrenByParentId" resultMap="CommentTreeMap">
+        SELECT *
+        FROM comment
+        WHERE parent_id = #{id}
+        ORDER BY create_time ASC
+    </select>
+
+    <insert id="addComment">
+        INSERT INTO comment(item_id,user_id,user_name,user_avatar,content,is_seller,parent_id)
+        VALUES (#{itemId},#{userId},#{userName},#{userAvatar},#{content},#{isSeller},0)
+    </insert>
+
+    <insert id="addReply">
+        INSERT INTO comment(item_id, user_id, user_name, user_avatar, content, is_seller, parent_id, create_time)
+        VALUES (#{itemId}, #{userId}, #{userName}, #{userAvatar}, #{content}, #{isSeller}, #{parentId}, #{now})
+    </insert>
+</mapper>

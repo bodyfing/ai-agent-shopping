@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gooshare.mapper.ItemMapper">
+    <select id="getItem" resultType="com.gooshare.entity.ItemInfo">
+        SELECT
+            i.id,
+            i.title,
+            i.price,
+            i.image_url as imageURL , -- 注意：你的Java里是imageURL(大写URL)
+            i.seller_id,
+            i.stock,
+            i.description,
+            i.like_count AS likeCount,       i.collect_count AS collectCount, i.browser_count AS browserCount, c1.name AS category,
+            c2.item_name AS categoryItem,    i.create_time AS createTime,
+            s.avatar AS avatar,
+            s.username AS seller,
+            s.location
+        FROM
+            item i
+                LEFT JOIN seller s ON i.seller_id = s.id
+                LEFT JOIN category c1 ON i.category_id = c1.id
+                LEFT JOIN category_item c2 ON i.category_item_id = c2.id
+    </select>
+
+    <select id="searchByKeywords"
+            resultType="com.gooshare.entity.ItemInfo">
+
+        select *
+        from item
+
+        <where>
+
+            <foreach collection="list"
+                     item="keyword"
+                     separator="or">
+
+                title like concat('%', #{keyword}, '%')
+
+            </foreach>
+
+        </where>
+
+    </select>
+
+<!--    <select id="getCategoryItem" resultType="com.gooshare.vo.ItemVO">-->
+<!--        SELECT-->
+<!--        item.id,-->
+<!--        item.title,-->
+<!--        item.price,-->
+<!--        seller.nickname AS seller,-->
+<!--        item.image_url AS image-->
+<!--        FROM item-->
+<!--        LEFT JOIN seller ON item.seller_id = seller.id-->
+<!--        <where>-->
+<!--            <if test="group != null and group != ''">-->
+<!--                AND item.category_id = (SELECT id FROM category WHERE name = #{group})-->
+<!--            </if>-->
+<!--            <if test="item != null and item != ''">-->
+<!--                AND item.category_item_id = (SELECT id FROM category_item WHERE item_name = #{item})-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+    <select id="getCategory" resultMap="categoryVOMap">
+        SELECT
+            c.id,
+            c.name,      -- 补上大类名称
+            c.icon,
+            ci.id AS item_id,   -- 补上子类ID，并起别名
+            ci.item_name
+        FROM category c
+                 LEFT JOIN category_item ci ON c.id = ci.category_id
+        ORDER BY c.sort, ci.sort
+    </select>
+    <select id="filterItem" resultType="com.gooshare.vo.ItemVO">
+        SELECT
+            item.id,
+            item.title,
+            item.price,
+            seller.nickname AS seller,
+            item.image_url AS imageURL
+        FROM item
+                 LEFT JOIN seller ON item.seller_id = seller.id
+        WHERE
+            item.category_id = (SELECT id FROM category WHERE name = #{groupTitle})
+          AND item.category_item_id = (SELECT id FROM category_item WHERE id = #{selectedItem});
+    </select>
+    <resultMap id="categoryVOMap" type="com.gooshare.vo.CategoryVO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="icon" column="icon"/>
+
+        <collection property="categoryItems" ofType="com.gooshare.vo.CategoryItemVO">
+            <id property="id" column="item_id"/>
+            <result property="itemName" column="item_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="getItemById" resultType="com.gooshare.entity.ItemInfo">
+        SELECT
+            i.id,
+            i.title,
+            i.price,
+            i.stock,
+            i.image_url as imageURL,
+            i.seller_id,
+            i.description,
+            i.like_count AS likeCount,    i.collect_count AS collectCount, i.browser_count AS browserCount, c1.name AS category,
+            c2.item_name AS categoryItem, i.create_time AS createTime,  s.avatar AS Avatar,           s.username AS seller,
+            s.location
+        FROM
+            item i
+                LEFT JOIN
+            seller s ON i.seller_id = s.id
+                LEFT JOIN
+            category c1 ON i.category_id = c1.id
+                LEFT JOIN
+            category_item c2 ON i.category_item_id = c2.id
+        WHERE
+            i.id = #{id}
+    </select>
+
+    <select id = "selectLiked" resultType="Boolean">
+        SELECT
+            id
+        FROM item_like
+        WHERE user_id = #{userId} AND item_id = #{itemId}
+    </select>
+
+    <insert id="likeById">
+        INSERT item_like(item_like.user_id, item_like.item_id, item_like.create_time)
+        VALUES (#{userId},#{itemId},#{now})
+    </insert>
+    <insert id="addBrowserCount">
+        UPDATE item SET browser_count = browser_count +1 where id = #{itemId}
+    </insert>
+
+    <update id="addCountLike">
+        UPDATE item SET like_count = like_count+1 where id = #{itemId}
+    </update>
+
+    <delete id="deleteLiked">
+        DELETE FROM item_like where item_id = #{itemId} AND user_id = #{userId}
+    </delete>
+
+    <update id="subLikeCount">
+        UPDATE item SET like_count = like_count - 1 WHERE id = #{itemId}
+    </update>
+
+    <update id="addCountCollect">
+        UPDATE item SET collect_count = collect_count+1 where id = #{itemId}
+    </update>
+
+    <update id="subCountCollect">
+        UPDATE item SET collect_count = collect_count - 1 WHERE id = #{itemId}
+    </update>
+
+    <select id="getItemByIds" resultType="com.gooshare.entity.ItemInfo">
+        SELECT
+        i.id, i.title, i.price, i.image_url as imageURL
+        FROM item i
+        WHERE i.id IN
+        <foreach collection="itemIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="searchByTitle" resultType="com.gooshare.entity.ItemInfo">
+        SELECT
+        i.id,
+        i.title,
+        i.price,
+        i.image_url as imageURL,
+        i.seller_id,
+        i.description,
+        i.like_count AS likeCount,
+        i.collect_count AS collectCount,
+        i.browser_count AS browserCount,
+        c1.name AS category,
+        c2.item_name AS categoryItem,
+        i.create_time AS createTime,
+        s.avatar AS avatar,
+        s.username AS seller,
+        s.location
+        FROM
+        item i
+        LEFT JOIN seller s ON i.seller_id = s.id
+        LEFT JOIN category c1 ON i.category_id = c1.id
+        LEFT JOIN category_item c2 ON i.category_item_id = c2.id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND i.title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+    <select id="getItemsByIds" resultType="com.gooshare.entity.ItemInfo">
+        SELECT
+        i.*,
+        s.nickname AS seller,
+        s.avatar AS avatar
+        FROM item i
+        LEFT JOIN seller s ON i.seller_id = s.id
+        WHERE i.id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY FIELD(i.id,
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </select>
+    <select id="searchItems" resultType="com.gooshare.entity.ItemInfo">
+
+        SELECT
+            i.id,
+            i.title,
+            i.price,
+            i.stock,
+            i.image_url AS imageURL,
+            i.description,
+            i.like_count AS likeCount,
+            i.collect_count AS collectCount,
+            i.browser_count AS browserCount,
+            i.brand_id AS brandId,
+            b.name AS brand,
+            i.category_id AS categoryId,
+            i.category_item_id AS categoryItemId,
+            c.name AS category,
+            ci.item_name AS categoryItem,
+            i.create_time AS createTime,
+            i.seller_id AS sellerId,
+            s.username AS seller,
+            s.avatar AS avatar,
+            s.location AS location
+        FROM item i
+        LEFT JOIN brand b ON i.brand_id = b.id
+        LEFT JOIN category c ON i.category_id = c.id
+        LEFT JOIN category_item ci ON i.category_item_id = ci.id
+        LEFT JOIN seller s ON i.seller_id = s.id
+
+        <where>
+
+            <!-- 只返回在售且有库存的商品 -->
+            AND i.status = 1
+            AND i.stock &gt; 0
+
+            <!-- 关键词搜索 -->
+            <if test="keyword != null and keyword != ''">
+                AND (
+                i.title LIKE CONCAT('%',#{keyword},'%')
+                OR i.description LIKE CONCAT('%',#{keyword},'%')
+                )
+            </if>
+
+
+            <!-- 一级分类 -->
+            <if test="categoryId != null">
+                AND i.category_id = #{categoryId}
+            </if>
+
+
+            <!-- 二级分类 -->
+            <if test="categoryItemId != null">
+                AND i.category_item_id = #{categoryItemId}
+            </if>
+
+
+            <!-- 品牌 -->
+            <if test="brandId != null">
+                AND i.brand_id = #{brandId}
+            </if>
+
+
+            <!-- 最低价格 -->
+            <if test="minPrice != null">
+                AND i.price &gt;= #{minPrice}
+            </if>
+
+
+            <!-- 最高价格 -->
+            <if test="maxPrice != null">
+                AND i.price &lt;= #{maxPrice}
+            </if>
+
+
+        </where>
+
+        <choose>
+
+            <!-- 价格从低到高 -->
+            <when test="sortType == 'PRICE_ASC'">
+                ORDER BY i.price ASC, i.create_time DESC, i.id DESC
+            </when>
+
+            <!-- 价格从高到低 -->
+            <when test="sortType == 'PRICE_DESC'">
+                ORDER BY i.price DESC, i.create_time DESC, i.id DESC
+            </when>
+
+            <!-- 默认按照最新发布时间 -->
+            <otherwise>
+                ORDER BY i.create_time DESC, i.id DESC
+            </otherwise>
+
+        </choose>
+
+        LIMIT #{limit}
+
+    </select>
+</mapper>

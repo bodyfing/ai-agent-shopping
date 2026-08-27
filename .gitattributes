@@ -1,0 +1,18 @@
+* text=auto
+
+# Cross-platform source and configuration files
+*.java text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.js text eol=lf
+*.vue text eol=lf
+*.json text eol=lf
+*.sql text eol=lf
+*.lua text eol=lf
+*.sh text eol=lf
+
+# Windows scripts
+*.cmd text eol=crlf
+*.bat text eol=crlf

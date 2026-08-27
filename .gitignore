@@ -1,0 +1,29 @@
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+**/application-local.yml
+**/application-local.yaml
+
+# Backend build and runtime files
+backend/target/
+backend/logs/
+backend/backups/
+backend/deploy/milvus/volumes/
+*.log
+
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+
+# IDE and operating system files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
+

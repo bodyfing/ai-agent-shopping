@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gooshare.mapper.PublishMapper">
+    <insert id="publishItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO item (
+            title,
+            price,
+            stock,
+            category_id,
+            category_item_id,
+            seller_id,
+            description,
+            image_url
+        )
+        VALUES (
+                   #{title},
+                   #{price},
+                   #{stock},
+                   #{categoryId},
+                   #{categoryItemId},
+                   #{sellerId},
+                   #{description},
+                   #{imageURL}
+               )
+    </insert>
+</mapper>
