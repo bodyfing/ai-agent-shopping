@@ -49,10 +49,10 @@ server:
 
 aliyun:
   oss:
-    endpoint: ${ALIYUN_OSS_ENDPOINT}
-    accessKeyId: ${ALIYUN_OSS_ACCESS_KEY_ID}
-    accessKeySecret: ${ALIYUN_OSS_ACCESS_KEY_SECRET}
-    bucketName: ${ALIYUN_OSS_BUCKET_NAME}
+    endpoint: ${ALIYUN_OSS_ENDPOINT:${OSS_ENDPOINT:}}
+    accessKeyId: ${ALIYUN_OSS_ACCESS_KEY_ID:${OSS_ACCESS_KEY_ID:}}
+    accessKeySecret: ${ALIYUN_OSS_ACCESS_KEY_SECRET:${OSS_ACCESS_KEY_SECRET:}}
+    bucketName: ${ALIYUN_OSS_BUCKET_NAME:${OSS_BUCKET_NAME:}}
 
 mybatis:
   configuration:
