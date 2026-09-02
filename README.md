@@ -45,6 +45,12 @@ AI 助手不会直接生成商品事实，而是通过受控工具查询 MySQL �
 
 ![GooShare 商品详情](docs/screenshots/item-detail.png)
 
+### 购物车与订单摘要
+
+购物车支持多商品勾选、数量调整和实时金额汇总，并在结算前展示订单摘要。
+
+![GooShare 购物车与订单摘要](docs/screenshots/shopping-cart.png)
+
 ### AI 导购助手
 
 用户通过自然语言描述预算和商品需求，ReactAgent 调用商品检索工具并基于数据库结果回答。
