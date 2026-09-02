@@ -21,17 +21,41 @@ AI 助手不会直接生成商品事实，而是通过受控工具查询 MySQL �
 
 ## 项目截图
 
+### 用户登录
+
+支持用户名密码与手机验证码两种登录方式，登录后由 Redis Token 维护会话状态。
+
+![GooShare 用户登录](docs/screenshots/password-login.png)
+
 ### 登录后的商品首页
 
 首页展示真实商品列表、热度榜、分类筛选与登录用户信息。
 
 ![GooShare 登录后的商品首页](docs/screenshots/home-logged-in.png)
 
+### 商品分类筛选
+
+按数码电子、家居生活、学习办公等分类筛选商品，示例展示手机分类结果与分页数据。
+
+![GooShare 商品分类筛选](docs/screenshots/category-filter.png)
+
+### 商品详情与交易入口
+
+详情页展示价格、库存、卖家、浏览与互动数据，并提供关注、购物车和下单入口。
+
+![GooShare 商品详情](docs/screenshots/item-detail.png)
+
 ### AI 导购助手
 
 用户通过自然语言描述预算和商品需求，ReactAgent 调用商品检索工具并基于数据库结果回答。
 
 ![GooShare AI 导购助手](docs/screenshots/ai-shopping-agent.png)
+
+### 商品发布
+
+卖家可以填写商品名称、价格、库存、分类和描述，并上传商品图片。
+
+![GooShare 商品发布](docs/screenshots/publish-item.png)
 
 ## 系统架构
 
