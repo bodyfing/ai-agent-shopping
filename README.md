@@ -19,6 +19,20 @@ AI 助手不会直接生成商品事实，而是通过受控工具查询 MySQL �
 | 对话记忆 | RedisSaver 持久化 Agent 检查点，以 `userId + conversationId` 隔离用户和会话 |
 | Agent 评测 | 知识召回、回答事实性、来源引用、禁止关键词和记忆隔离测试 |
 
+## 项目截图
+
+### 登录后的商品首页
+
+首页展示真实商品列表、热度榜、分类筛选与登录用户信息。
+
+![GooShare 登录后的商品首页](docs/screenshots/home-logged-in.png)
+
+### AI 导购助手
+
+用户通过自然语言描述预算和商品需求，ReactAgent 调用商品检索工具并基于数据库结果回答。
+
+![GooShare AI 导购助手](docs/screenshots/ai-shopping-agent.png)
+
 ## 系统架构
 
 ```mermaid
@@ -372,4 +386,3 @@ npm run build
 - DashScope、OSS、Dify、数据库和 MinIO 凭据只能存放在本地环境变量或安全的密钥管理服务中。
 - 前端环境变量会进入浏览器构建产物，禁止使用 `VUE_APP_` 保存服务端密钥。
 - 如果密钥曾经进入 Git 历史，仅删除当前文件不够，还应立即轮换密钥并清理历史记录。
-
