@@ -82,7 +82,7 @@ export default {
         })
         .catch(err => {
           console.error("数据加载失败:", err);
-          this.$message.error("无法获取商品列表");
+          alert("无法获取商品列表，请检查后端服务是否已启动");
         });
     },
     updatePageSize() {

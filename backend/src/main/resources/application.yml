@@ -1,10 +1,12 @@
 spring:
   application:
     name: GooShare
+  profiles:
+    active: local
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/gooshare}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -25,25 +27,22 @@ spring:
     time-zone: GMT+8
   ai:
     dashscope:
-      api-key: ${AI_DASHSCOPE_API_KEY}
+      api-key: ${AI_DASHSCOPE_API_KEY:}
       chat:
+        api-key: ${AI_DASHSCOPE_API_KEY:}
         options:
           model: ${DASHSCOPE_MODEL:qwen-plus}
           temperature: 0.3
       embedding:
+        api-key: ${AI_DASHSCOPE_API_KEY:}
         options:
           model: ${DASHSCOPE_EMBEDDING_MODEL:text-embedding-v3}
     vectorstore:
-      milvus:
-        client:
-          host: ${MILVUS_HOST:localhost}
-          port: ${MILVUS_PORT:19530}
-        database-name: default
+      qdrant:
+        host: ${QDRANT_HOST:localhost}
+        port: ${QDRANT_PORT:6334}
         collection-name: gooshare_knowledge
         initialize-schema: true
-        embedding-dimension: 1024
-        index-type: FLAT
-        metric-type: COSINE
 server:
   port: 8084
 

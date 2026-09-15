@@ -16,7 +16,7 @@
       <h2>欢迎登录校园二手交易平台</h2>
       <input type="text" v-model="phone" placeholder="请输入手机号" />
       <div class="code-login">
-        <input type="text" placeholder="请输入验证码" />
+        <input type="text" v-model="code" placeholder="请输入验证码" />
         <button
           :class="{'disabled-btn':isCounting && phone != null}"
           :disabled="isCounting && phone != null"
@@ -43,6 +43,7 @@ export default {
         password: ""
       },
       phone: "",
+      code: "",
       isCodeLogin: false,
       isCounting: false, //是否正在倒计时
       isChange: false,

@@ -13,6 +13,7 @@ backend/target/
 backend/logs/
 backend/backups/
 backend/deploy/milvus/volumes/
+backend/deploy/qdrant/volumes/
 *.log
 
 # Frontend dependencies and build output

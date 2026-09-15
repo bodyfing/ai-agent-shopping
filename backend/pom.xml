@@ -52,7 +52,7 @@
     </repository>
   </repositories>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -120,7 +120,7 @@
             <version>1.1.2.0</version>
         </dependency>
 
-        <!-- DashScope ChatModel 支持（如果使用其他模型，请跳转 Spring AI 文档选择对应的 starter） -->
+        <!-- DashScope ChatModel 和 EmbeddingModel -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
@@ -141,22 +141,11 @@
             <artifactId>redisson</artifactId>
             <version>3.13.6</version>
         </dependency>
+        <!-- 向量存储：本地 Qdrant（gRPC） -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-vector-store-milvus</artifactId>
+            <artifactId>spring-ai-starter-vector-store-qdrant</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.milvus</groupId>-->
-<!--            <artifactId>milvus-sdk-java</artifactId>-->
-<!--            <version>3.0.2</version>-->
-<!--        </dependency>-->
-
-        <!-- 向量存储抽象（RAG 用） -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.ai</groupId>-->
-<!--            <artifactId>spring-ai-vector-store</artifactId>-->
-<!--        </dependency>-->
-
     </dependencies>
 
     <dependencyManagement>

@@ -72,7 +72,7 @@ public class KnowledgeIngestionRunner implements ApplicationRunner {
             // 先删除该文件上一次导入的片段，防止重复入库
             vectorStore.delete("source == '" + fileName + "'");
 
-            // 自动调用 EmbeddingModel，然后把文本、向量和元数据写入 Milvus
+            // 自动调用 EmbeddingModel，然后把文本、向量和元数据写入 Qdrant
             vectorStore.add(documents);
 
             totalCount += documents.size();

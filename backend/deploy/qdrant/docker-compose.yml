@@ -1,0 +1,15 @@
+# GooShare 向量库：Qdrant 单容器
+services:
+  qdrant:
+    container_name: gooshare-qdrant
+    image: qdrant/qdrant:v1.13.4
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./volumes/qdrant:/qdrant/storage
+
+networks:
+  default:
+    name: gooshare-qdrant

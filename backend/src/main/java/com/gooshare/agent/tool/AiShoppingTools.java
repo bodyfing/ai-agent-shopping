@@ -57,7 +57,7 @@ public class AiShoppingTools {
         //定义
         String keyword = normalize(input.getKeyword());
         String brand = normalize(input.getBrand());
-        String category = normalize(input.getCategory());
+        String category = normalizeCategory(input.getCategory());
         String categoryItem = normalize(input.getCategoryItem());
         log.info(
                 "Agent搜索入参：keyword={}, brand={}, category={}, " +
@@ -266,6 +266,20 @@ public class AiShoppingTools {
         return normalized.isEmpty()
                 ? null
                 : normalized;
+    }
+
+    /** 将模型可能使用的分类别名统一为数据库中的标准名称。 */
+    private String normalizeCategory(String value){
+        String normalized = normalize(value);
+        if (normalized == null) {
+            return null;
+        }
+        return switch (normalized) {
+            case "数码产品", "电子产品", "数码" -> "数码电子";
+            case "家居", "家居用品" -> "家居生活";
+            case "学习", "办公" -> "学习办公";
+            default -> normalized;
+        };
     }
 
     /**
